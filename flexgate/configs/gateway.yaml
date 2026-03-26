@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+routes:
+  - path_prefix: /api/users
+    strip_prefix: /api
+    upstream: http://localhost:9001
+
+  - path_prefix: /api/orders
+    strip_prefix: /api
+    upstream: http://localhost:9002
