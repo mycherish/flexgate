@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  gateway:
+    build:
+      context: ..          # 设置上下文为项目根目录
+      dockerfile: flexgate/docker/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../flexgate/configs:/app/configs # 挂载配置，方便修改不用重编镜像
+    depends_on:
+      - user-service
+      - order-service
+    networks:
+      - flex-net
+
+  user-service:
+    build:
+      context: ..
+      dockerfile: services/user-service/Dockerfile # 建议给 service 也写个 Dockerfile
+    ports:
+      - "9001:9001"
+    networks:
+      - flex-net
+
+  order-service:
+    build:
+      context: ..
+      dockerfile: services/order-service/Dockerfile
+    ports:
+      - "9002:9002"
+    networks:
+      - flex-net
+
+networks:
+  flex-net:
+    driver: bridge
