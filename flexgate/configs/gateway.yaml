@@ -5,7 +5,9 @@ routes:
   - path_prefix: /api/users
     strip_prefix: /api
     upstream: http://localhost:9001
+    # upstream: http://user-service:9001  # 使用 docker-compose 中的服务名
 
   - path_prefix: /api/orders
     strip_prefix: /api
     upstream: http://localhost:9002
+    # upstream: http://order-service:9002
