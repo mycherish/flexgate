@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func NewReverseProxy(target string, prefix string, stripPrefix string) (*httputil.ReverseProxy, error) {
+func NewReverseProxy(target string, stripPrefix string) (*httputil.ReverseProxy, error) {
 	targetURL, err := url.Parse(target)
 	if err != nil {
 		return nil, err
