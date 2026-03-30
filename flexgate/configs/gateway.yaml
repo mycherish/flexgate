@@ -6,8 +6,14 @@ routes:
     strip_prefix: /api
     upstream: http://localhost:9001
     # upstream: http://user-service:9001  # 使用 docker-compose 中的服务名
+    ratelimit:
+      rate: 10      # 每秒产生 10 个令牌 (QPS)
+      capacity: 20  # 桶容量为 20 (允许瞬间并发冲刺)
 
   - path_prefix: /api/orders
     strip_prefix: /api
     upstream: http://localhost:9002
     # upstream: http://order-service:9002
+    ratelimit:
+      rate: 50
+      capacity: 100
