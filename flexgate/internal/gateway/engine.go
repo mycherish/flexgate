@@ -23,8 +23,10 @@ func NewEngine(cfg *config.Config) *Engine {
 	gin.SetMode(gin.ReleaseMode)
 	// 创建干净的 Gin 实例
 	r := gin.New()
+	r.RedirectTrailingSlash = false
 	// 3. 注册核心中间件
 	r.Use(middleware.Recovery())
+	r.Use(middleware.RequestID())
 	// 优先使用我们手写的 Logger，面试时好聊逻辑
 	r.Use(middleware.Logger())
 
@@ -66,6 +68,12 @@ func (e *Engine) setupRoutes() {
 			group.Use(middleware.RateLimitMiddleware(tb))
 
 			// 实际转发逻辑
+			// 1. 匹配 /api/users 这种不带斜杠的根路径
+			group.Any("", func(c *gin.Context) {
+				p.ServeHTTP(c.Writer, c.Request)
+			})
+
+			// 2. 匹配 /api/users/ 以及后续所有子路径
 			group.Any("/*any", func(c *gin.Context) {
 				p.ServeHTTP(c.Writer, c.Request)
 			})

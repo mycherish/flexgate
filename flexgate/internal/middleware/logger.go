@@ -28,14 +28,21 @@ func Logger() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
 
+		// 在 Logger 中间件中获取请求ID
+		reqID, exists := c.Get(RequestIDContextKey)
+		if !exists {
+			reqID = "-"
+		}
+
 		// 6. 打印结构化日志
 		// 格式：[FlexGate] 200 | 1.25ms | 127.0.0.1 | GET "/api/users"
-		log.Printf("[FlexGate] %3d | %13v | %15s | %s %s",
+		log.Printf("[FlexGate] %3d | %13v | %15s | %s %s | %s",
 			statusCode,
 			latencyTime,
 			clientIP,
 			reqMethod,
 			reqUri,
+			reqID,
 		)
 	}
 }
