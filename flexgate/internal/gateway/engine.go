@@ -24,9 +24,9 @@ func NewEngine(cfg *config.Config) *Engine {
 	// 创建干净的 Gin 实例
 	r := gin.New()
 	// 3. 注册核心中间件
+	r.Use(middleware.Recovery())
 	// 优先使用我们手写的 Logger，面试时好聊逻辑
 	r.Use(middleware.Logger())
-	r.Use(gin.Recovery())
 
 	e := &Engine{
 		ginEngine: r,
